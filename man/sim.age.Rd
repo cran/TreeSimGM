@@ -28,6 +28,8 @@ sim.age(age, numbsim, distributionspname, distributionspparameters, distribution
 \item{treearray}{Array of numbsim trees with the time since origin / most recent common ancestor being age. If tree goes extinct (only possible when mrca = FALSE), returns 0. If only one extant and no extinct tips, returns 1.}
 }
 \references{
+#to cite this package use:  citation("TreeSimGM")
+
 O. Hagen, K. Hartmann, M. Steel and T. Stadler (2013). Age-dependent speciation explains empirical tree shape distribution. Manuscript.
 
 T. Stadler: Simulating trees on a fixed number of extant species. Syst. Biol. (2011) 60: 676-684.

@@ -38,7 +38,7 @@ while (bingo == FALSE)	# ######## while bingo start
 {
 	stop <- FALSE
 	stopsearch <- FALSE
-	mytree <-list(edge=NULL, tip.label=NULL, edge.length=NULL, Nnode=NULL,  root.edge=NULL)
+	mytree <-list(edge=NULL, tip.label=NULL, edge.length=NULL, Nnode=NULL,  root.edge=NULL, age=NULL)
 	class(mytree) <- "phylo"
 	edge <- matrix(c(-1,-2), ncol=2)
 	leaves <- NULL
@@ -300,6 +300,7 @@ if (stop == TRUE)
 	mytree$edge.length <- edge.length
 	mytree$Nnode <-  length(realleaves) + length(extinct)
 	mytree$root.edge <- edge.length[1]
+	mytree$age <- age
 }	
 }
 

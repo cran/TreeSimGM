@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Simulating General Model Trees on a fixed number of extant Taxa}
 \description{
-sim.taxa simulates trees on n species under a general model (i.e. any given distribution for speciation and extinction). The method allows to stop the simulation right after reaching a given number of tips/taxa or to simulate bigger trees and then sample from them uniformly using the gsa code from the R package TreeSim.
+sim.taxa simulates trees on n species under a general model (i.e. any given distribution for speciation and extinction). The method allows to stop the simulation right after reaching a given number of tips/taxa or to simulate a bigger tree and then uniformly sample one of the n-tips trees that existed in the past until m tips. For this the gsa code from the R package TreeSim is used.
 The method allows for symmetric and asymmetric binary split speciation mode. To keep all extinct tips use complete=TRUE, if complere=FALSE the tree is pruned, resulting on a so called reconstructed tree.
 }
 \usage{
@@ -48,7 +48,7 @@ is the label that will be drawn on each extinct tip. By default labelextinctsp="
 When complete = FALSE: Sampling fraction: If stochsampling=FALSE: The actual number of tips is n/frac, but only n tips are included (incomplete sampling). If stochsampling=TRUE: Each tip is included into the final tree with probability frac. When complete = TRUE: all extinct and non-sampled lineages are included, i.e. the tree has n/frac extant leaves.
 }
   \item{sampling}{
-stochastic sampling, see TreeSim for more details
+stochastic sampling of tips, see TreeSim for more details
 }
   \item{gsa}{
 gsa=TRUE indicates that the sim.gsa.taxa will be used and the n parameter will dictate the final number of tips on the tree. Note that m needs to be always bigger then n. 
@@ -62,6 +62,8 @@ If gsa = FALSE, there is no need of specifying n, once the final trees will be o
 \item{treearray}{Array of numbsim trees with the time since origin / most recent common ancestor being age. If tree goes extinct (only possible when mrca = FALSE), returns 0. If only one extant and no extinct tips, returns 1.}
 }
 \references{
+#to cite this package use:  citation("TreeSimGM")
+
 O. Hagen, K. Hartmann, M. Steel and T. Stadler (2013). Age-dependent speciation explains empirical tree shape distribution. Manuscript.
 
 T. Stadler: Simulating trees on a fixed number of extant species. Syst. Biol. (2011) 60: 676-684.

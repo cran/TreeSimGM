@@ -1,7 +1,7 @@
 Package: TreeSimGM
 Type: Package
 Title: Simulating Phylogenetic Trees under a General Model
-Version: 1.0
+Version: 1.1
 Date: 2013-01-01
 Author: Oskar Hagen, Tanja Stadler
 Maintainer: Oskar Hagen <oskar.is.hagen@gmail.com>
@@ -27,6 +27,7 @@ Description: The package is a flexible simulation tool for phylogenetic
         rate to zero.
 License: GPL-2
 LazyLoad: yes
-Packaged: 2013-02-14 09:18:57 UTC; oskar
+Packaged: 2013-02-20 21:12:11 UTC; oskar
+NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-02-14 10:38:58
+Date/Publication: 2013-02-21 07:52:51

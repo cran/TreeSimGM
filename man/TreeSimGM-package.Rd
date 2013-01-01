@@ -10,8 +10,8 @@ TreeSimGM is a flexible simulation tool for phylogenetic trees that uses a gener
 \tabular{ll}{
 Package: \tab TreeSimGM\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2013-01-01\cr
+Version: \tab 1.1\cr
+Date: \tab 2013-02-20\cr
 License: \tab GPL-2 \cr
 LazyLoad: \tab yes\cr
 }
@@ -23,6 +23,8 @@ Oskar Hagen, Tanja Stadler
 Maintainer: Oskar Hagen <oskar.is.hagen@gmail.com>
 }
 \references{
+#to cite this package use:  citation("TreeSimGM")
+
 O. Hagen, K. Hartmann, M. Steel and T. Stadler (2013). Age-dependent speciation explains empirical tree shape distribution. Manuscript.
 
 T. Stadler: Simulating trees on a fixed number of extant species. Syst. Biol. (2011) 60: 676-684.
