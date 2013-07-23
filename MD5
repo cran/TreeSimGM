@@ -1,11 +1,11 @@
-aa3a85b8fc415621d5f5a8d63a034629 *DESCRIPTION
+ea025654648cb16c47139d75736db913 *DESCRIPTION
 f8e59a2aac3a2c855b4bc57efee4fa60 *NAMESPACE
 e70b2881f19c8b0319566ddb7f4fbcba *R/mytree.asymmetric.age.R
 523f501a47f5a1d303ae9646068f4ae2 *R/mytree.asymmetric.taxa.R
 241e6922642934389acd2d9c1f38bd50 *R/mytree.symmetric.age.R
 754b39381c9c6ff8985f249ffe3f528a *R/mytree.symmetric.taxa.R
 181528c9af11b66e01e358d2b6d9b4b1 *R/sim.age.R
-10b9c056f22546dc669fa52fdb46f3f7 *R/sim.taxa.R
-5751de205fa0a7e58dba37f258877089 *man/TreeSimGM-package.Rd
-e84ce2554f2995ab3c9059b4f625b8f2 *man/sim.age.Rd
-9fe7fcb37d8c53419c352c8cb355652c *man/sim.taxa.Rd
+ab4f1be1d053dfc2059056ed12ebfdde *R/sim.taxa.R
+4077cce51fb613729bab8f33e9c33ecf *man/TreeSimGM-package.Rd
+34b002d0562d41a479a6975e5dea54c1 *man/sim.age.Rd
+c32394db6c205706011b106bb4435203 *man/sim.taxa.Rd

@@ -1,5 +1,5 @@
 sim.taxa <-
-function (numbsim, n, m=n,  distributionspname, distributionspparameters, distributionextname="rexp", distributionextparameters=0, symmetric = TRUE, complete=TRUE, labellivingsp="sp.", labelextinctsp="ext.", frac=1, sampling=2, gsa=FALSE) { 
+function (numbsim, n, m=n,  distributionspname, distributionspparameters, distributionextname="rexp", distributionextparameters=0, symmetric = TRUE, complete=TRUE, labellivingsp="sp.", labelextinctsp="ext.", sampling=2, gsa=FALSE) { 
 # numbsim is the number of simulated trees
 # n is the Number of tips in sampled trees (Number of extant sampled leaves)
 # m is the number of standing taxa that will exist on the first generated trees, to then be sampled for n number of tips. Case gsa=TRUE, m is equal to n.
@@ -12,7 +12,6 @@ function (numbsim, n, m=n,  distributionspname, distributionspparameters, distri
 # complete: If complete = TRUE, the tree with the extinct and non-sampled lineages is returned. If complete = FALSE, the extinct and non-sampled lineages are suppressed. Complete=FALSE by default
 # labellivingsp is the label that will be drawn on each tip surving until the present. An automatic sequential number will be added to the chosen name. By default labellivingsp="sp."
 # labelextinctsp is the label that will be drawn on each extinct tip. By default labelextinctsp <- "ext."
-# frac: When complete = FALSE: Sampling fraction: If stochsampling=FALSE: The actual number of tips is n/frac, but only n tips are included (incomplete sampling). If stochsampling=TRUE: Each tip is included into the final tree with probability frac. When complete = TRUE: all extinct and non-sampled lineages are included, i.e. the tree has n/frac extant leaves.
 # sampling: stochastic sampling, default
 # gsa TRUE indicates that the sim.gsa.taxa will be used, the n parameter indicates the final number of species. Note that m needs to be allways bigger then n. If gsa = FALSE, there is no need of specifying n, once the final trees will be of size m
 # entry in the distributionparameters can be "#", # or c(#,#) in case of more characters
@@ -48,7 +47,7 @@ while (length(mytreegsazed) < numbsim)
 	if (gsa==T)
 	{
 		#print("YES - gsa")
-		mytreegsa <- sim.gsa.taxa(mytree, n=n, frac=frac, sampling=sampling, complete=complete)
+		mytreegsa <- sim.gsa.taxa(mytree, n=n, sampling=sampling, complete=complete)
 	} 
 	else 
 	{

@@ -5,7 +5,9 @@
 \description{
 sim.age simulates stochastic trees conditioned on the time since origin of the extant tips under a general model (i.e. any given distribution for speciation and extinction). The method allows for symmetric and asymmetric binary split speciation mode. To keep all extinct trees use complete=TRUE, if complete=FALSE the tree is pruned, resulting on a so called reconstructed tree.}
 \usage{
-sim.age(age, numbsim, distributionspname, distributionspparameters, distributionextname = "rexp", distributionextparameters = 0, symmetric = TRUE, complete = TRUE, labellivingsp = "sp.", labelextinctsp = "ext.")
+sim.age(age, numbsim, distributionspname, distributionspparameters,
+distributionextname = "rexp", distributionextparameters = 0, symmetric = TRUE, 
+complete = TRUE, labellivingsp = "sp.", labelextinctsp = "ext.")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,9 +30,8 @@ sim.age(age, numbsim, distributionspname, distributionspparameters, distribution
 \item{treearray}{Array of numbsim trees with the time since origin / most recent common ancestor being age. If tree goes extinct (only possible when mrca = FALSE), returns 0. If only one extant and no extinct tips, returns 1.}
 }
 \references{
-#to cite this package use:  citation("TreeSimGM")
 
-O. Hagen, K. Hartmann, M. Steel and T. Stadler (2013). Age-dependent speciation explains empirical tree shape distribution. Manuscript.
+O. Hagen, K. Hartmann, M. Steel and T. Stadler (2014). Age-dependent speciation explains empirical tree shape distribution. Manuscript.
 
 T. Stadler: Simulating trees on a fixed number of extant species. Syst. Biol. (2011) 60: 676-684.
 }
@@ -46,10 +47,10 @@ sim.age(3,1,"rweibull", c(0.4,3))
 # Plot one of ten trees
 # uniform distribution for speciation and 
 # exponential distribution for extinction
-xuxu <- sim.age(age=3,10,"runif", c(0,2), "rexp", c(0.1) )
+leo <- sim.age(age=3,10,"runif", c(0,2), "rexp", c(0.1) )
 # note that for runif, the first argument is omitted and 0 stands for the
 # min parameter of this specific function as 2 stands for max.
-plot(xuxu[[1]])
+plot(leo[[1]])
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
