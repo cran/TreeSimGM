@@ -1,3 +1,7 @@
-export(sim.age, sim.taxa)
+export(sim.age, sim.taxa, track.shift)
 
-import(TreeSim)
+import(TreeSim, ape)
+
+importFrom("stats", "runif")
+importFrom("utils", "capture.output")
+importFrom("ape", "collapse.singles")

@@ -2,20 +2,20 @@
 \alias{TreeSimGM-package}
 \alias{TreeSimGM}
 \docType{package}
-\title{Simulating Phylogenies under a General Model (symmetric & asymmetric)}
+\title{Simulating Phylogenies under a General Model (symmetric & asymmetric) with or without shifts}
 \description{
-TreeSimGM is a flexible simulation tool for phylogenetic trees that uses a general model. This model can assume any probability distribution for the waiting time until speciation, as well as any distribution for the waiting time until extinction. In clear English this means that 'TreeSimGM, allows you to simulate stochastic phylogenetic trees using any probability distribution and parameters for speciation and  extinction. Moreover, a general model can be distinguished in the way that speciation and extinction processes happen. In this package, we provide two general binary splitting models: (i) symmetric, in which for every speciation event new waiting times until speciation and extinction are drawn for both daughter lineages; and (ii) asymmetric, in which a speciation event results in one species with new waiting times, and another that carries the extinction time and age of its ancestor. Those models were inspired by allopatric and peripatric speciation modes respectively. Both models (symmetric and asymmetric) were created and implemented so that different processes (distributions) for speciation and extinction could be independently and explicitly specified. It is also possible to have an implicit extinction process by setting the extinction rate to zero and simulating only based on speciation processes.
+Provides a flexible simulation tool for phylogenetic trees under a general model for speciation and extinction. Trees with a user-specified number of extant tips, or a user-specified stem age are simulated. It is possible to assume any probability distribution for the waiting time until speciation and extinction. Furthermore, the waiting times to speciation / extinction may be scaled in different parts of the tree, meaning we can simulate trees with clade-dependent diversification processes. At a speciation event, one species splits into two. We allow for two different modes at these splits: (i) symmetric, where for every speciation event new waiting times until speciation and extinction are drawn for both daughter lineages; and (ii) asymmetric, where a speciation event results in one species with new waiting times, and another that carries the extinction time and age of its ancestor. The symmetric mode can be seen as an vicariant or allopatric process where divided populations suffer equal evolutionary forces while the asymmetric mode could be seen as a peripatric speciation where a mother lineage continues to exist.
 }
 \details{
 \tabular{ll}{
 Package: \tab TreeSimGM\cr
 Type: \tab Package\cr
-Version: \tab 1.2\cr
-Date: \tab 2014-07-23\cr
+Version: \tab 2.1\cr
+Date: \tab 2017-05-01\cr
 License: \tab GPL-2 \cr
 LazyLoad: \tab yes\cr
 }
-TreeSimGM can simulate many trees returning a list of phylogenetic trees. The trees can be simulated in different ways: (i) by age `sim.age` (i.e. the user specifies a time, or tree age, when the simulation should stop); (ii) by taxa `sim.taxa` (i.e. the user specifies the number of tips desired on the final tree). Moreover, the user needs to specify the specialization mode (i.e. symmetric or asymmetric), thus, there are four major possible combinations: (a) sim.age with parameter symmetric = TRUE; (b) sim.age with parameter symmetric = FALSE (i.e. asymmetric); (c) sim.taxa with parameter symmetric = TRUE; (d) sim.taxa with parameter symmetric = FALSE (i.e. asymmetric)
+TreeSimGM returns a list of phylogenetic trees. The trees can be simulated in different ways: (i) by age 'sim.age' (i.e. the simulation is started with one species and the user specifies a time, which is the stem age after which the simulation should stop); (ii) by taxa 'sim.taxa' (i.e. the user specifies the number of extant tips in the final tree). The user always specifies a distribution and parameters for the waiting time until speciation / extinction. Moreover, the user needs to specify the mode (i.e. symmetric or asymmetric), thus, there are four major possible combinations: (a) sim.age with parameter symmetric = TRUE; (b) sim.age with parameter symmetric = FALSE (i.e. asymmetric); (c) sim.taxa with parameter symmetric = TRUE; (d) sim.taxa with parameter symmetric = FALSE (i.e. asymmetric). Additionally, the user can choose if lineage-specific changes shall occur, through scaling in the waiting times to speciation or extinction events. The scaling can happen for (1) speciation, (2) extinction or (3) both. Setting the probability for a new species to have a scaled speciation or extinction times ('shiftspprob' and 'shiftextprob') to a value between ]0,1] will automatically activate the lineage-specific change model. If a change happens, a value is taken from the speciation / extinction waiting time distribution and is multiplied by a stochastic scaling factor. By default, both speciation and extinction shift frequencies are set to zero, meaning that if not stated otherwise, no shifts are considered.
 }
 \author{
 Oskar Hagen, Tanja Stadler
@@ -24,26 +24,31 @@ Maintainer: Oskar Hagen <oskar.hagen@outlook.com>
 }
 \references{
 
-O. Hagen, K. Hartmann, M. Steel and T. Stadler (2014). Age-dependent speciation explains empirical tree shape distribution. Manuscript.
+O. Hagen and T. Stadler. TreeSimGM: simulating phylogenetic trees under general speciation-extinction models in R. (submitted manuscript)
+
+O. Hagen, K. Hartmann, M. Steel and T. Stadler (2015). Age-dependent Speciation can Explain the Shape of Empirical Trees. Systematic Biology. 64, v.3, p.432-440.
 
 T. Stadler: Simulating trees on a fixed number of extant species. Syst. Biol. (2011) 60: 676-684.
 }
-%\keyword{tree, phylogeny, simulation, general model, macroevolution }
+\keyword{tree, phylogeny, simulation, general model, macroevolution }
 \seealso{
-\code{\link[TreeSim]{TreeSim}}
-\code{\link[ape]{ape}}
+\code{\link[TreeSim]{TreeSim}},
+\code{\link[ape]{ape}}, \code{sim.age}, \code{sim.taxa}, \code{track.shift}
 }
 \examples{
-##plots the first tree of a list of two generated
-#simulation based on age, this case = 3. Note that by default, symmetric = TRUE
+##plots the first tree of a list of two simulated trees
+#simulation based on age, this case = 3. 
+#Note that by default, symmetric = TRUE
+#i.e. we simulate under symmetric speciation and under no extinction.
+library("TreeSimGM")
 trialtrees <- sim.age(3,2,"rweibull", c(0.4,3))
 plot(trialtrees[[1]])
 
-##obtain 5 trees (with 40 tips) with taxa based and asymmetric 
+##obtain 5 trees with 40 tips under asymmetric speciation and with extinction
 #simulation, without extinction
 mytree <-  sim.taxa(numbsim=5, n=40, m=40,  distributionspname="rweibull", 
 distributionspparameters=c(0.1,1), distributionextname="rexp",
-distributionextparameters="0", symmetric = FALSE, complete=TRUE,
+distributionextparameters=0.5, symmetric = FALSE, complete=TRUE,
 labellivingsp="sp.", labelextinctsp="ext.", sampling=2, gsa=FALSE)
 
 #see sim.taxa and sim.age help pages for further details

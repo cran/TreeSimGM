@@ -1,5 +1,6 @@
 sim.taxa <-
-function (numbsim, n, m=n,  distributionspname, distributionspparameters, distributionextname="rexp", distributionextparameters=0, symmetric = TRUE, complete=TRUE, labellivingsp="sp.", labelextinctsp="ext.", sampling=2, gsa=FALSE) { 
+function (numbsim, n, m=n,  distributionspname, distributionspparameters, distributionextname="rexp", distributionextparameters=0, symmetric=TRUE, complete=TRUE, labellivingsp="sp.", labelextinctsp="ext.", sampling=2, gsa=FALSE, 
+          shiftspprob=0, shiftdistributionspname="runif", shiftdistributionspparameters=c(0.5,0.9), shiftextprob=0, shiftdistributionextname="runif", shiftdistributionextparameters=c(0.1,0.2), shiftsplabel="Ss", shiftextlabel="Se") {
 # numbsim is the number of simulated trees
 # n is the Number of tips in sampled trees (Number of extant sampled leaves)
 # m is the number of standing taxa that will exist on the first generated trees, to then be sampled for n number of tips. Case gsa=TRUE, m is equal to n.
@@ -14,50 +15,52 @@ function (numbsim, n, m=n,  distributionspname, distributionspparameters, distri
 # labelextinctsp is the label that will be drawn on each extinct tip. By default labelextinctsp <- "ext."
 # sampling: stochastic sampling, default
 # gsa TRUE indicates that the sim.gsa.taxa will be used, the n parameter indicates the final number of species. Note that m needs to be allways bigger then n. If gsa = FALSE, there is no need of specifying n, once the final trees will be of size m
-# entry in the distributionparameters can be "#", # or c(#,#) in case of more characters
+# entry in the distributionparameters can be "#", # or c(#,#) in case of more variables
+# shiftspprob: frequency by which a speciation shift happens, default is 0, that means no shift. This value should range from 0 (no shift) to 1 (all species are shifted)
+# shiftdistributionspname: distribution by which the shift (waiting time multiplier) will be drawn
+# shiftdistributionspparameters: parameters of the chosen distribution  
+# shiftextprob: frequency by which a extinction shift happens, default is 0, that means no shift. This value should range from 0 (no shift) to 1 (all species are shifted)
+# shiftdistributionextname: distribution by which the shift (waiting time multiplier) will be drawn
+# shiftdistributionextparameters: parameters of the chosen distribution 
+# shiftsplabel: label to be added to the species that suffered speciation shift
+# shiftextlabel: label to be added to the species that suffered extinction shift
+  
 	check<-gsa
 	if (gsa==F && complete==T){check<-T}
-	#print(paste("gsa=", gsa, " complete=", complete, " check=", check))
 	mytreegsazed <- list()
-while (length(mytreegsazed) < numbsim)
-{
-	mytree <- list()
-	step <- 1
-	{
-	if (symmetric == TRUE) 	
-	{
-		for (step in 1: (numbsim) ){
-			mytreenext <- mytree.symmetric.taxa(m=m, distributionspname=distributionspname, distributionspparameters=distributionspparameters, distributionextname=distributionextname, 	distributionextparameters=distributionextparameters, complete=check, labellivingsp=labellivingsp, labelextinctsp=labelextinctsp)
-			mytree<- c(mytree, list(mytreenext))
-			#print(paste("using symmetric [", step, "] - generated livingsp:", length(mytreenext[2]$tip.label) ))
-		}	
-	}
-	else
-	{
-			for (step in 1: (numbsim) ){
-			mytreenext <- mytree.asymmetric.taxa(m=m, distributionspname=distributionspname, distributionspparameters=distributionspparameters, distributionextname=distributionextname, 	distributionextparameters=distributionextparameters, complete=check, labellivingsp=labellivingsp, labelextinctsp=labelextinctsp)
-			mytree<- c(mytree, list(mytreenext))
-			#print(paste("using asymmetric [", step, "] - generated livingsp:", length(mytreenext[2]$tip.label) ))
-	
-		}
-	}
-	}
-	#print(paste("starting gsa.taxa on", length(mytree), "trees."))
-	{
-	if (gsa==T)
-	{
-		#print("YES - gsa")
-		mytreegsa <- sim.gsa.taxa(mytree, n=n, sampling=sampling, complete=complete)
-	} 
-	else 
-	{
-		#print("NO - gsa")
-		mytreegsa <- mytree 
-	}
-	}
-	
-	mytreegsazed <- c(mytreegsazed, mytreegsa)
-	#print(paste("finished gsa.taxa with size of ",length(mytreegsazed), "trees"))
+  while (length(mytreegsazed) < numbsim)
+  {
+  	mytree <- list()
+  	step <- 1
+  	{
+  	if (symmetric == TRUE) 	
+  	{
+  		for (step in 1: (numbsim) ){
+  			mytreenext <- mytree.symmetric.taxa(m=m, distributionspname=distributionspname, distributionspparameters=distributionspparameters, distributionextname=distributionextname, 	distributionextparameters=distributionextparameters, complete=check, labellivingsp=labellivingsp, labelextinctsp=labelextinctsp, 
+  			                                    shiftspprob=shiftspprob, shiftdistributionspname=shiftdistributionspname, shiftdistributionspparameters=shiftdistributionspparameters, shiftextprob=shiftextprob, shiftdistributionextname=shiftdistributionextname, shiftdistributionextparameters=shiftdistributionextparameters, shiftsplabel=shiftsplabel, shiftextlabel=shiftextlabel)
+  			mytree<- c(mytree, list(mytreenext))
+  		}	
+  	}
+  	else
+  	{
+  		for (step in 1: (numbsim) ){
+  			mytreenext <- mytree.asymmetric.taxa(m=m, distributionspname=distributionspname, distributionspparameters=distributionspparameters, distributionextname=distributionextname, 	distributionextparameters=distributionextparameters, complete=check, labellivingsp=labellivingsp, labelextinctsp=labelextinctsp,
+  			                                     shiftspprob=shiftspprob, shiftdistributionspname=shiftdistributionspname, shiftdistributionspparameters=shiftdistributionspparameters, shiftextprob=shiftextprob, shiftdistributionextname=shiftdistributionextname, shiftdistributionextparameters=shiftdistributionextparameters, shiftsplabel=shiftsplabel, shiftextlabel=shiftextlabel)
+  			mytree<- c(mytree, list(mytreenext))
+   		}
+  	}
+  	}
+  	{
+  	if (gsa==T)
+  	{
+  		mytreegsa <- sim.gsa.taxa(mytree, n=n, sampling=sampling, complete=complete)
+  	} 
+  	else 
+  	{
+  		mytreegsa <- mytree #gsa is TRUE
+  	}
+  	}
+  	mytreegsazed <- c(mytreegsazed, mytreegsa)
 	}
 mytreegsazeds <- sample(mytreegsazed, numbsim)
 mytreegsazed <- mytreegsazeds
