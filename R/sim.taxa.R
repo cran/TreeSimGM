@@ -1,6 +1,7 @@
 sim.taxa <-
-function (numbsim, n, m=n,  distributionspname, distributionspparameters, distributionextname="rexp", distributionextparameters=0, symmetric=TRUE, complete=TRUE, labellivingsp="sp.", labelextinctsp="ext.", sampling=2, gsa=FALSE, 
-          shiftspprob=0, shiftdistributionspname="runif", shiftdistributionspparameters=c(0.5,0.9), shiftextprob=0, shiftdistributionextname="runif", shiftdistributionextparameters=c(0.1,0.2), shiftsplabel="Ss", shiftextlabel="Se") {
+function (numbsim, n, m=n,  waitsp, waitext="rexp(0)", symmetric=TRUE, complete=TRUE, tiplabel=c("sp.", "ext.","Ss", "Se"), 
+          shiftsp=list(prob=0, strength="runif(0.5,0.9)"), shiftext=list(prob=0, strength="runif(0.1,0.2)"), 
+          sampling=list(frac=1, branchprop=FALSE), sampling.gsa=1, gsa=FALSE) {
 # numbsim is the number of simulated trees
 # n is the Number of tips in sampled trees (Number of extant sampled leaves)
 # m is the number of standing taxa that will exist on the first generated trees, to then be sampled for n number of tips. Case gsa=TRUE, m is equal to n.
@@ -25,6 +26,29 @@ function (numbsim, n, m=n,  distributionspname, distributionspparameters, distri
 # shiftsplabel: label to be added to the species that suffered speciation shift
 # shiftextlabel: label to be added to the species that suffered extinction shift
   
+  if (complete==TRUE & sampling$frac!=1) {
+    warning("Sampling on taxa based can only be used with complete=FALSE, thus complete was changed to FALSE")
+    complete=FALSE
+  }
+  
+  if (sampling$frac>1 | sampling$frac<0){
+    warning("Sampling Sampling fraction needs to range between 0 and 1, thus sampling$frac was changed to 1")
+    sampling$frac=1
+  }
+  
+  if (sampling$frac!=1){
+    n=round(n/sampling$frac)
+    if (m<n) {
+      warning("You are using sampling, thus tips=n/sampling$frac. m is smaller than n, thus we changed m=n/frac")
+      m=n
+    }
+  }
+  
+  if (m<n){
+    warning("m can not be samller than n, thus we changed m=n")
+    m=n
+  }
+  
 	check<-gsa
 	if (gsa==F && complete==T){check<-T}
 	mytreegsazed <- list()
@@ -36,16 +60,16 @@ function (numbsim, n, m=n,  distributionspname, distributionspparameters, distri
   	if (symmetric == TRUE) 	
   	{
   		for (step in 1: (numbsim) ){
-  			mytreenext <- mytree.symmetric.taxa(m=m, distributionspname=distributionspname, distributionspparameters=distributionspparameters, distributionextname=distributionextname, 	distributionextparameters=distributionextparameters, complete=check, labellivingsp=labellivingsp, labelextinctsp=labelextinctsp, 
-  			                                    shiftspprob=shiftspprob, shiftdistributionspname=shiftdistributionspname, shiftdistributionspparameters=shiftdistributionspparameters, shiftextprob=shiftextprob, shiftdistributionextname=shiftdistributionextname, shiftdistributionextparameters=shiftdistributionextparameters, shiftsplabel=shiftsplabel, shiftextlabel=shiftextlabel)
+  			mytreenext <- mytree.symmetric.taxa(m=m, waitsp=waitsp, waitext=waitext, complete=check, tiplabel=tiplabel, 
+  			                                    shiftsp=shiftsp, shiftext=shiftext, sampling=sampling, gsa=gsa)
   			mytree<- c(mytree, list(mytreenext))
   		}	
   	}
   	else
   	{
   		for (step in 1: (numbsim) ){
-  			mytreenext <- mytree.asymmetric.taxa(m=m, distributionspname=distributionspname, distributionspparameters=distributionspparameters, distributionextname=distributionextname, 	distributionextparameters=distributionextparameters, complete=check, labellivingsp=labellivingsp, labelextinctsp=labelextinctsp,
-  			                                     shiftspprob=shiftspprob, shiftdistributionspname=shiftdistributionspname, shiftdistributionspparameters=shiftdistributionspparameters, shiftextprob=shiftextprob, shiftdistributionextname=shiftdistributionextname, shiftdistributionextparameters=shiftdistributionextparameters, shiftsplabel=shiftsplabel, shiftextlabel=shiftextlabel)
+  			mytreenext <- mytree.asymmetric.taxa(m=m, waitsp=waitsp, waitext=waitext, complete=check, tiplabel=tiplabel,
+  			                                     shiftsp=shiftsp, shiftext=shiftext, sampling=sampling, gsa=gsa)
   			mytree<- c(mytree, list(mytreenext))
    		}
   	}
@@ -53,11 +77,11 @@ function (numbsim, n, m=n,  distributionspname, distributionspparameters, distri
   	{
   	if (gsa==T)
   	{
-  		mytreegsa <- sim.gsa.taxa(mytree, n=n, sampling=sampling, complete=complete)
+  		mytreegsa <- sim.gsa.taxa(mytree, n=n, sampling=sampling.gsa, frac=sampling$frac, complete=complete)
   	} 
   	else 
   	{
-  		mytreegsa <- mytree #gsa is TRUE
+  		mytreegsa <- mytree #gsa is FALSE
   	}
   	}
   	mytreegsazed <- c(mytreegsazed, mytreegsa)

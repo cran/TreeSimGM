@@ -1,21 +1,45 @@
 mytree.asymmetric.taxa <-
-function (m, distributionspname, distributionspparameters, distributionextname, distributionextparameters, complete=TRUE, labellivingsp="sp.", labelextinctsp="ext.", 
-          shiftspprob, shiftdistributionspname, shiftdistributionspparameters, shiftextprob, shiftdistributionextname, shiftdistributionextparameters, shiftsplabel, shiftextlabel)
+function (m, waitsp, waitext, complete=TRUE, tiplabel, shiftsp, shiftext, sampling, gsa)
 { 
 
-udistributionspparameters <- capture.output (cat(distributionspparameters, sep=","))
-udistributionextparameters <- capture.output (cat(distributionextparameters, sep=","))
-rnumbsp <- parse(text=paste(distributionspname, "(1,", udistributionspparameters,")"))
-rnumbext <- parse(text=paste(distributionextname, "(1,", udistributionextparameters,")"))
-# for a delta test or dirac delta function test of the algorithim
-#rnumbsp <- 0.5
-#rnumbext <- 0.6
+  # create waiting time functions #
+  if (is.function(waitsp)){
+    rnumbsp <- parse(text="waitsp()")
+  } else if (is.character(waitsp)){
+    rnumbsp <- express.distribution(waitsp)
+  }
+  
+  if (is.function(waitext)){
+    rnumbext <- parse(text="waitext()")
+    firstextpar <- "funk"
+  } else if (is.character(waitext)){
+    rnumbext <- express.distribution(waitext)
+    firstextpar <- get.first.par.distribution(waitext)
+  }
+  
+  if (is.function(shiftsp$strength)){
+    rnumbshiftsp <- parse(text="shiftsp$strength()")
+  } else if (is.character(shiftsp$strength)){
+    rnumbshiftsp <- express.distribution(shiftsp$strength)
+  }
+  
+  if (is.function(shiftext$strength)){
+    rnumbshiftext <- parse(text="shiftext$strength()")
+  } else if (is.character(shiftext$strength)){
+    rnumbshiftext <- express.distribution(shiftext$strength)
+  }
+  
+  # end create waiting time functions #
+  
+  
+  labellivingsp=tiplabel[1]
+  labelextinctsp=tiplabel[2]
+  shiftsplabel=tiplabel[3]
+  shiftextlabel=tiplabel[4]
+  
+  shiftspprob=shiftsp$prob
+  shiftextprob=shiftext$prob 
 
-##SM-S
-ushiftdistributionspparameters <- capture.output (cat(shiftdistributionspparameters, sep=","))
-ushiftdistributionextparameters <- capture.output (cat(shiftdistributionextparameters, sep=","))
-rnumbshiftsp <- parse(text=paste(shiftdistributionspname, "(1,", ushiftdistributionspparameters,")"))
-rnumbshiftext <- parse(text=paste(shiftdistributionextname, "(1,", ushiftdistributionextparameters,")"))
 
 #testing for shift speciation
 testshiftsp <- function (spt){
@@ -116,7 +140,7 @@ while (bingo == FALSE)	# while bingo start
 spt <- eval(rnumbsp)
 #to remove NaN warnings messages
 {
-if (distributionextparameters[1] == 0)
+if (firstextpar == 0)
 {
 	extt <- suppressWarnings(eval(rnumbext))
 }
@@ -234,7 +258,7 @@ while (stop == FALSE)
 	##SM -E
 	#to remove NaN warnings messages
 	{
-	if (distributionextparameters[1] == 0)
+	if (firstextpar == 0)
 	{
 		extt <- suppressWarnings(eval(rnumbext))
 	}
@@ -502,6 +526,9 @@ else
 	}
 	}	
 }
+}
+if (sampling$frac!=1 & class(mytree)=="phylo" & !gsa){ # do sampling.....
+  mytree <- sample.mytree(mytree.=mytree, realleaves.=realleaves, extinct.=extinct, sampling.=sampling, complete.=complete)
 }
 return(mytree)
 }

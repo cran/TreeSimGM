@@ -1,7 +1,47 @@
 mytree.symmetric.age <-
-function (age, distributionspname, distributionspparameters, distributionextname, distributionextparameters, complete=TRUE, labellivingsp="sp.", labelextinctsp="ext.",
-          shiftspprob, shiftdistributionspname, shiftdistributionspparameters, shiftextprob, shiftdistributionextname, shiftdistributionextparameters, shiftsplabel, shiftextlabel)
+function (age, waitsp, waitext, complete=TRUE, tiplabel, shiftsp, shiftext, sampling)
 { 
+  
+  # create waiting time functions #
+  if (is.function(waitsp)){
+    rnumbsp <- parse(text="waitsp()")
+  } else if (is.character(waitsp)){
+    rnumbsp <- express.distribution(waitsp)
+  }
+  
+  if (is.function(waitext)){
+    rnumbext <- parse(text="waitext()")
+    firstextpar <- "funk"
+  } else if (is.character(waitext)){
+    rnumbext <- express.distribution(waitext)
+    firstextpar <- get.first.par.distribution(waitext)
+  }
+  
+  if (is.function(shiftsp$strength)){
+    rnumbshiftsp <- parse(text="shiftsp$strength()")
+  } else if (is.character(shiftsp$strength)){
+    rnumbshiftsp <- express.distribution(shiftsp$strength)
+  }
+  
+  if (is.function(shiftext$strength)){
+    rnumbshiftext <- parse(text="shiftext$strength()")
+  } else if (is.character(shiftext$strength)){
+    rnumbshiftext <- express.distribution(shiftext$strength)
+  }
+  
+  # end create waiting time functions #
+  
+  
+  labellivingsp=tiplabel[1]
+  labelextinctsp=tiplabel[2]
+  shiftsplabel=tiplabel[3]
+  shiftextlabel=tiplabel[4]
+  
+  shiftspprob=shiftsp$prob
+  shiftextprob=shiftext$prob 
+  
+
+  
 # # # # # # # # # DECLARATIONS  MACHINE # # # # # # # # # 
 	stop <- FALSE
 	mytree <-list(edge=NULL, tip.label=NULL, edge.length=NULL, Nnode=NULL, root.edge=NULL, age=NULL, 
@@ -21,19 +61,7 @@ function (age, distributionspname, distributionspparameters, distributionextname
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-#generation of the expression that creates the random number from the desired distribution
-	udistributionspparameters <- capture.output (cat(distributionspparameters, sep=","))
-	udistributionextparameters <- capture.output (cat(distributionextparameters, sep=","))
-	rnumbsp <- parse(text=paste(distributionspname, "(1,", udistributionspparameters,")"))
-	rnumbext <- parse(text=paste(distributionextname, "(1,", udistributionextparameters,")"))
-# eval(rnumbsp) #draws one random number from the chosen distribution	
-# eval(rnumbext) #draws one random number from the chosen distribution	
 
-## SM - S
-  ushiftdistributionspparameters <- capture.output (cat(shiftdistributionspparameters, sep=","))
-  ushiftdistributionextparameters <- capture.output (cat(shiftdistributionextparameters, sep=","))
-  rnumbshiftsp <- parse(text=paste(shiftdistributionspname, "(1,", ushiftdistributionspparameters,")"))
-  rnumbshiftext <- parse(text=paste(shiftdistributionextname, "(1,", ushiftdistributionextparameters,")"))
   	
   #testing for shift speciation
   testshiftsp <- function (spt){
@@ -96,15 +124,16 @@ shiftextm <- matrix(c(-1,1,-2,1), byrow=TRUE, ncol=2, dimnames=list(NULL,c("node
 
 # initial if, in case the (-1,-2) edge get extinct or bigger than age
 spt <- eval(rnumbsp)
+
 #to remove NaN warnings messages
 {
-if (distributionextparameters[1] == 0)
+if (firstextpar == 0)
 {
 	extt <- suppressWarnings(eval(rnumbext))
 }
 else
 {
-	extt <- eval(rnumbext)
+  extt <- eval(rnumbext)
 }
 }
 
@@ -161,7 +190,9 @@ while (stop == FALSE)
 		for (i in 1:2)
 		{ 
 			edge <- rbind( edge, c(species, (nextsp - i) ) )
+			
 			spt <- eval(rnumbsp)
+			
 			##SM - S now we examine for shifts and update spt and shiftspm
 			testshiftspout <- testshiftsp(spt)
 			spt <- testshiftspout$spt
@@ -169,7 +200,7 @@ while (stop == FALSE)
 			##SM - E
 			#to remove NaN warnings messages
 			{
-			if (distributionextparameters[1] == 0)
+			if (firstextpar == 0)
 			{
 				extt <- suppressWarnings(eval(rnumbext))
 			}
@@ -400,5 +431,11 @@ else
 	}	
 }
 }
+
+if (sampling$frac!=1 & class(mytree)=="phylo"){ # do sampling.....
+  mytree <- sample.mytree(mytree.=mytree, realleaves.=realleaves, extinct.=extinct, sampling.=sampling)
+}
+
+
 return(mytree)
 }

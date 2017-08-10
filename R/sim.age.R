@@ -1,6 +1,6 @@
 sim.age <-
-function (age, numbsim, distributionspname, distributionspparameters, distributionextname="rexp", distributionextparameters=0, symmetric=TRUE, complete=TRUE, labellivingsp="sp.", labelextinctsp="ext.",
-          shiftspprob=0, shiftdistributionspname="runif", shiftdistributionspparameters=c(0.5,0.9), shiftextprob=0, shiftdistributionextname="runif", shiftdistributionextparameters=c(0.1,0.2), shiftsplabel="Ss", shiftextlabel="Se") { 
+function (age, numbsim, waitsp,  waitext="rexp(0)", symmetric=TRUE, complete=TRUE, tiplabel=c("sp.", "ext.","Ss", "Se"),
+          shiftsp=list(prob=0, strength="runif(0.5,0.9)"), shiftext=list(prob=0, strength="runif(0.1,0.2)"), sampling=list(frac=1, branchprop=FALSE)) { 
 # age is the total age until each tree will be simulated (e.g. age <- 3). Time since origin / most recent common ancestor
 # numbsim is the number of simulated trees
 # distributionspname is the name of the desired probability function that will be used for the speciation process (e.g. distributionspname <- "rexp"). Note that the name should contain an `r` before it, since it refers to the randon number of the desired function (e.g. "rweibull", "runif")
@@ -15,13 +15,13 @@ function (age, numbsim, distributionspname, distributionspparameters, distributi
 {
 if (symmetric == TRUE) 
 {
-	mytree <- lapply(rep(age,numbsim), mytree.symmetric.age, distributionspname, distributionspparameters, distributionextname, distributionextparameters, complete, labellivingsp, labelextinctsp,
-	                 shiftspprob, shiftdistributionspname, shiftdistributionspparameters, shiftextprob, shiftdistributionextname, shiftdistributionextparameters, shiftsplabel, shiftextlabel)
+	mytree <- lapply(rep(age,numbsim), mytree.symmetric.age, waitsp, waitext, complete, tiplabel,
+	                 shiftsp, shiftext, sampling)
 }
 else
 {
-	mytree <- lapply(rep(age,numbsim), mytree.asymmetric.age, distributionspname, distributionspparameters, distributionextname, distributionextparameters, complete, labellivingsp, labelextinctsp,
-	                 shiftspprob, shiftdistributionspname, shiftdistributionspparameters, shiftextprob, shiftdistributionextname, shiftdistributionextparameters, shiftsplabel, shiftextlabel)
+	mytree <- lapply(rep(age,numbsim), mytree.asymmetric.age,waitsp, waitext, complete, tiplabel,
+	                 shiftsp, shiftext, sampling)
 }
 }
 return(mytree)	

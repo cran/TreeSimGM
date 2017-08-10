@@ -2,7 +2,7 @@
 \alias{TreeSimGM-package}
 \alias{TreeSimGM}
 \docType{package}
-\title{Simulating Phylogenies under a General Model (symmetric & asymmetric) with or without shifts}
+\title{Simulating Phylogenetic Trees under General Bellman Harris and Lineage Shift Model}
 \description{
 Provides a flexible simulation tool for phylogenetic trees under a general model for speciation and extinction. Trees with a user-specified number of extant tips, or a user-specified stem age are simulated. It is possible to assume any probability distribution for the waiting time until speciation and extinction. Furthermore, the waiting times to speciation / extinction may be scaled in different parts of the tree, meaning we can simulate trees with clade-dependent diversification processes. At a speciation event, one species splits into two. We allow for two different modes at these splits: (i) symmetric, where for every speciation event new waiting times until speciation and extinction are drawn for both daughter lineages; and (ii) asymmetric, where a speciation event results in one species with new waiting times, and another that carries the extinction time and age of its ancestor. The symmetric mode can be seen as an vicariant or allopatric process where divided populations suffer equal evolutionary forces while the asymmetric mode could be seen as a peripatric speciation where a mother lineage continues to exist.
 }
@@ -10,8 +10,8 @@ Provides a flexible simulation tool for phylogenetic trees under a general model
 \tabular{ll}{
 Package: \tab TreeSimGM\cr
 Type: \tab Package\cr
-Version: \tab 2.1\cr
-Date: \tab 2017-05-01\cr
+Version: \tab 2.2\cr
+Date: \tab 2017-08-01\cr
 License: \tab GPL-2 \cr
 LazyLoad: \tab yes\cr
 }
@@ -24,7 +24,7 @@ Maintainer: Oskar Hagen <oskar.hagen@outlook.com>
 }
 \references{
 
-O. Hagen and T. Stadler. TreeSimGM: simulating phylogenetic trees under general speciation-extinction models in R. (submitted manuscript)
+O. Hagen and T. Stadler. TreeSimGM: simulating phylogenetic trees under general Bellman Harris and lineage shift speciation-extinction models in R. (submitted manuscript)
 
 O. Hagen, K. Hartmann, M. Steel and T. Stadler (2015). Age-dependent Speciation can Explain the Shape of Empirical Trees. Systematic Biology. 64, v.3, p.432-440.
 
@@ -41,15 +41,13 @@ T. Stadler: Simulating trees on a fixed number of extant species. Syst. Biol. (2
 #Note that by default, symmetric = TRUE
 #i.e. we simulate under symmetric speciation and under no extinction.
 library("TreeSimGM")
-trialtrees <- sim.age(3,2,"rweibull", c(0.4,3))
+trialtrees <- sim.age(3,4,"rweibull(0.4,3)")
 plot(trialtrees[[1]])
 
 ##obtain 5 trees with 40 tips under asymmetric speciation and with extinction
 #simulation, without extinction
-mytree <-  sim.taxa(numbsim=5, n=40, m=40,  distributionspname="rweibull", 
-distributionspparameters=c(0.1,1), distributionextname="rexp",
-distributionextparameters=0.5, symmetric = FALSE, complete=TRUE,
-labellivingsp="sp.", labelextinctsp="ext.", sampling=2, gsa=FALSE)
+mytree <-  sim.taxa(numbsim=5, n=40, m=40,  waitsp="rweibull(0.1,1)", 
+waitext="rexp(0.5)", symmetric = FALSE)
 
-#see sim.taxa and sim.age help pages for further details
+#see sim.age and sim.taxa help pages for further details
 }

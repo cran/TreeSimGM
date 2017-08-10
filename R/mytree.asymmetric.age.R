@@ -1,12 +1,43 @@
 mytree.asymmetric.age <-
-function (age, distributionspname, distributionspparameters, distributionextname, distributionextparameters, complete=TRUE, labellivingsp="sp.", labelextinctsp="ext.",
-          shiftspprob, shiftdistributionspname, shiftdistributionspparameters, shiftextprob, shiftdistributionextname, shiftdistributionextparameters, shiftsplabel, shiftextlabel)
+function (age, waitsp, waitext, complete=TRUE, tiplabel, shiftsp, shiftext, sampling)
 { 
-  ##SM-S
-  ushiftdistributionspparameters <- capture.output (cat(shiftdistributionspparameters, sep=","))
-  ushiftdistributionextparameters <- capture.output (cat(shiftdistributionextparameters, sep=","))
-  rnumbshiftsp <- parse(text=paste(shiftdistributionspname, "(1,", ushiftdistributionspparameters,")"))
-  rnumbshiftext <- parse(text=paste(shiftdistributionextname, "(1,", ushiftdistributionextparameters,")"))
+  # create waiting time functions #
+  if (is.function(waitsp)){
+    rnumbsp <- parse(text="waitsp()")
+  } else if (is.character(waitsp)){
+    rnumbsp <- express.distribution(waitsp)
+  }
+  
+  if (is.function(waitext)){
+    rnumbext <- parse(text="waitext()")
+    firstextpar <- "funk"
+  } else if (is.character(waitext)){
+    rnumbext <- express.distribution(waitext)
+    firstextpar <- get.first.par.distribution(waitext)
+  }
+  
+  if (is.function(shiftsp$strength)){
+    rnumbshiftsp <- parse(text="shiftsp$strength()")
+  } else if (is.character(shiftsp$strength)){
+    rnumbshiftsp <- express.distribution(shiftsp$strength)
+  }
+  
+  if (is.function(shiftext$strength)){
+    rnumbshiftext <- parse(text="shiftext$strength()")
+  } else if (is.character(shiftext$strength)){
+    rnumbshiftext <- express.distribution(shiftext$strength)
+  }
+  
+  # end create waiting time functions #
+  
+  
+  labellivingsp=tiplabel[1]
+  labelextinctsp=tiplabel[2]
+  shiftsplabel=tiplabel[3]
+  shiftextlabel=tiplabel[4]
+  
+  shiftspprob=shiftsp$prob
+  shiftextprob=shiftext$prob 
   
   #fucntion for testing for shift speciation
   testshiftsp <- function (spt){
@@ -89,10 +120,7 @@ function (age, distributionspname, distributionspparameters, distributionextname
   shiftedspextinct <- NULL
   shiftedextextinct <- NULL
   ## SM - E
-  udistributionspparameters <- capture.output (cat(distributionspparameters, sep=","))
-  udistributionextparameters <- capture.output (cat(distributionextparameters, sep=","))
-  rnumbsp <- parse(text=paste(distributionspname, "(1,", udistributionspparameters,")"))
-  rnumbext <- parse(text=paste(distributionextname, "(1,", udistributionextparameters,")"))
+
   
   ##SM-S creating shiftsp and shiftext matrixes...
   shiftspm <- matrix(c(-1,1,-2,1), byrow=TRUE, ncol=2, dimnames=list(NULL,c("node","strength")))
@@ -103,7 +131,7 @@ function (age, distributionspname, distributionspparameters, distributionextname
   spt <- eval(rnumbsp)
   #to remove NaN warnings messages in case of zero inside the distribution parameters
   {
-  if (distributionextparameters[1] == 0)
+  if (firstextpar == 0)
   {
     extt <- suppressWarnings(eval(rnumbext))
   }
@@ -175,12 +203,19 @@ function (age, distributionspname, distributionspparameters, distributionextname
     # here we sample until the speciation (i.e. spt) is bigger than the traject length of the leaf, because the process should be valid for speciation as for extinction.
     #
     ##
-    while (spt <= motherage){
-      #print(paste("again.. because spt was=", spt))
+    #probablydelta=FALSE
+    count <- 0
+    while (spt <= motherage) {
+      # print(paste("again.. because spt was=", spt))
       spt <- eval(rnumbsp)
       #SM-S
       testshiftspout <- testshiftsp(spt)
       spt <- testshiftspout$spt
+      count <- count+1
+      if (count>10 & spt==motherage) {
+        spt <- eval(rnumbext) +1
+        break()
+      }
       ##SM -E
     }
     ## SM - S
@@ -241,7 +276,7 @@ function (age, distributionspname, distributionspparameters, distributionextname
     ##SM -E
     #to remove NaN warnings messages
     {
-    if (distributionextparameters[1] == 0)
+    if (firstextpar == 0)
     {
       extt <- suppressWarnings(eval(rnumbext))
     }
@@ -483,6 +518,9 @@ function (age, distributionspname, distributionspparameters, distributionextname
       }
     }	
   }
+  }
+  if (sampling$frac!=1 & class(mytree)=="phylo"){ # do sampling.....
+    mytree <- sample.mytree(mytree.=mytree, realleaves.=realleaves, extinct.=extinct, sampling.=sampling)
   }
   return(mytree)
 }

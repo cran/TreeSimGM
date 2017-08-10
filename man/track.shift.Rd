@@ -27,7 +27,7 @@ is the node number or tip label that should be tracked. The numbers are the numb
 }
 \references{
 
-O. Hagen and T. Stadler. TreeSimGM: simulating phylogenetic trees under general speciation-extinction models in R. (submitted manuscript)
+O. Hagen and T. Stadler. TreeSimGM: simulating phylogenetic trees under general Bellman Harris and lineage shift speciation-extinction models in R. (submitted manuscript)
 
 }
 \author{Oskar Hagen, Tanja Stadler}
@@ -42,12 +42,10 @@ set.seed(2142)
 # Simulating a tree under an asymmetric speciation mode with frequent changes in 
 # speciation and extinction (repectively 50% and 30% probability)
 
-shif_spext_asym <- sim.taxa(numbsim=1, n=5,  distributionspname="rexp", 
-distributionspparameters=c(1), distributionextname="rexp", 
-distributionextparameters=c(0.5),symmetric = FALSE, shiftspprob=0.5, 
-shiftdistributionspname="rnorm", shiftdistributionspparameters=c(0.5,0.01), 
-shiftextprob=0.3, shiftdistributionextname="runif", 
-shiftdistributionextparameters=c(0,0.5))
+shif_spext_asym <- sim.taxa(numbsim=1, n=5,  waitsp="rexp(1)", 
+waitext="rexp(0.5)", symmetric = FALSE, 
+shiftsp=list(prob=0.5, strength="rnorm(0.5,0.01)"), 
+shiftext=list(prob=0.3, strength="runif(0,0.5)"))
 
 # visualiying the generated stochastic tree
 
