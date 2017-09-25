@@ -2,8 +2,8 @@ Package: TreeSimGM
 Type: Package
 Title: Simulating Phylogenetic Trees under General Bellman Harris and
         Lineage Shift Model
-Version: 2.2
-Date: 2017-08-01
+Version: 2.3
+Date: 2017-09-20
 Author: Oskar Hagen, Tanja Stadler
 Maintainer: Oskar Hagen <oskar.hagen@outlook.com>
 Depends: TreeSim, ape
@@ -13,6 +13,6 @@ LazyLoad: yes
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2017-08-10 17:12:18 UTC; ohagen
+Packaged: 2017-09-25 17:24:29 UTC; admin
 Repository: CRAN
-Date/Publication: 2017-08-10 17:20:34 UTC
+Date/Publication: 2017-09-25 18:40:02 UTC

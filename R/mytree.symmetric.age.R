@@ -4,13 +4,13 @@ function (age, waitsp, waitext, complete=TRUE, tiplabel, shiftsp, shiftext, samp
   
   # create waiting time functions #
   if (is.function(waitsp)){
-    rnumbsp <- parse(text="waitsp()")
+    rnumbsp <- waitsp#parse(text="waitsp()")
   } else if (is.character(waitsp)){
     rnumbsp <- express.distribution(waitsp)
   }
   
   if (is.function(waitext)){
-    rnumbext <- parse(text="waitext()")
+    rnumbext <- waitext#parse(text="waitext()")
     firstextpar <- "funk"
   } else if (is.character(waitext)){
     rnumbext <- express.distribution(waitext)
@@ -18,13 +18,13 @@ function (age, waitsp, waitext, complete=TRUE, tiplabel, shiftsp, shiftext, samp
   }
   
   if (is.function(shiftsp$strength)){
-    rnumbshiftsp <- parse(text="shiftsp$strength()")
+    rnumbshiftsp <- shiftsp$strength#parse(text="shiftsp$strength()")
   } else if (is.character(shiftsp$strength)){
     rnumbshiftsp <- express.distribution(shiftsp$strength)
   }
   
   if (is.function(shiftext$strength)){
-    rnumbshiftext <- parse(text="shiftext$strength()")
+    rnumbshiftext <- shiftext$strength#parse(text="shiftext$strength()")
   } else if (is.character(shiftext$strength)){
     rnumbshiftext <- express.distribution(shiftext$strength)
   }
@@ -67,7 +67,7 @@ function (age, waitsp, waitext, complete=TRUE, tiplabel, shiftsp, shiftext, samp
   testshiftsp <- function (spt){
     if (shiftspprob!=0){
       if (runif(1,0,1)<shiftspprob) { #cheking if shift happens based on a uniform distribution U[0,1]
-        shiftspstrength <- eval(rnumbshiftsp) #draw shift strength
+        shiftspstrength <- rnumbshiftsp()#eval(rnumbshiftsp) #draw shift strength
         #print(paste("Hey, a speciation shift happened at node", nextsp - i, "with strenght", shiftspstrength ))
       }else{
         shiftspstrength <- shiftspm[shiftspm[,"node"]==species,"strength"] #inherit ancestor shift
@@ -88,7 +88,7 @@ function (age, waitsp, waitext, complete=TRUE, tiplabel, shiftsp, shiftext, samp
   testshiftext <- function (extt){
     if (shiftextprob!=0){
       if (runif(1,0,1)<shiftextprob) { #cheking if shift happens based on a uniform distribution U[0,1]
-        shiftextstrength <- eval(rnumbshiftext) #draw shift strength
+        shiftextstrength <- rnumbshiftext()#eval(rnumbshiftext) #draw shift strength
         #print(paste("Hey, an extinction shift happened at node", nextsp - i, "with strenght", shiftextstrength ))
       }else{
         shiftextstrength <- shiftextm[shiftextm[,"node"]==species,"strength"] #inherit ancestor shift
@@ -123,17 +123,17 @@ shiftextm <- matrix(c(-1,1,-2,1), byrow=TRUE, ncol=2, dimnames=list(NULL,c("node
 ##SM - E
 
 # initial if, in case the (-1,-2) edge get extinct or bigger than age
-spt <- eval(rnumbsp)
+spt <- rnumbsp()#eval(rnumbsp)
 
 #to remove NaN warnings messages
 {
 if (firstextpar == 0)
 {
-	extt <- suppressWarnings(eval(rnumbext))
+	extt <- suppressWarnings(rnumbext())#eval(rnumbext)
 }
 else
 {
-  extt <- eval(rnumbext)
+  extt <- rnumbext()#eval(rnumbext)
 }
 }
 
@@ -191,7 +191,7 @@ while (stop == FALSE)
 		{ 
 			edge <- rbind( edge, c(species, (nextsp - i) ) )
 			
-			spt <- eval(rnumbsp)
+			spt <- rnumbsp()#eval(rnumbsp)
 			
 			##SM - S now we examine for shifts and update spt and shiftspm
 			testshiftspout <- testshiftsp(spt)
@@ -202,11 +202,11 @@ while (stop == FALSE)
 			{
 			if (firstextpar == 0)
 			{
-				extt <- suppressWarnings(eval(rnumbext))
+				extt <- suppressWarnings(rnumbext())#eval(rnumbext)
 			}
 			else
 			{
-				extt <- eval(rnumbext)
+				extt <- rnumbext()#eval(rnumbext)
 			}
 			}
 

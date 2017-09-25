@@ -58,7 +58,9 @@ express.distribution <- function(distributionstring){
     stop("please provide a string as waiting time or shift strength")
   }
   split <- strsplit(distributionstring, "(" , fixed  =T)
-  return(parse(text=paste0(split[[1]], collapse = "(1,")))
+  #return(parse(text=paste0(split[[1]], collapse = "(1,")))
+  x <- paste0("function()", paste0(split[[1]], collapse = "(1,"))
+  return(eval(parse(text=x)))
 }
 
 get.first.par.distribution <- function(distributionstring){

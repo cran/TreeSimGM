@@ -62,7 +62,7 @@ If gsa = FALSE, there is no need of specifying m, once the final trees will be o
 }
 \references{
 
-O. Hagen and T. Stadler. TreeSimGM: simulating phylogenetic trees under general Bellman Harris and lineage shift speciation-extinction models in R. (submitted manuscript)
+O. Hagen and T. Stadler (2017). TreeSimGM: Simulating phylogenetic trees under general Bellman Harris models with lineage-specific shifts of speciation and extinction in R. Methods in Ecology and Evolution.
 
 O. Hagen, K. Hartmann, M. Steel and T. Stadler (2015). Age-dependent Speciation can Explain the Shape of Empirical Trees. Systematic Biology. 64, v.3, p.432-440.
 
