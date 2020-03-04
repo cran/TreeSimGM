@@ -433,7 +433,7 @@ if (stop == TRUE)
 		shiftedspextinct <- rep(0,length(extinct))
 		data <- shiftspm[shiftspm[,"node"]%in%extinct,]
 		#error handling in case only one species got extinct and data is transformed into a vector and not a matrix...
-		if(class(data)=="numeric"){
+		if(!is(data, "matrix")){
 		  data <- matrix(data, ncol=2)
 		}
 		shiftedspextinct[data[sort.list(data[,1]),2 ]!=1] <- 1
@@ -444,7 +444,7 @@ if (stop == TRUE)
 		shiftedextextinct <- rep(0,length(extinct))
 		data <- shiftextm[shiftextm[,"node"]%in%extinct,]
 		#error handling in case only one species got extinct and data is transformed into a vector and not a matrix...
-		if(class(data)=="numeric"){
+		if(!is(data, "matrix")){
 		  data <- matrix(data, ncol=2)
 		}
 		shiftedextextinct[data[sort.list(data[,1]),2 ]!=1] <- 1

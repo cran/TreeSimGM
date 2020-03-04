@@ -10,8 +10,8 @@ Provides a flexible simulation tool for phylogenetic trees under a general model
 \tabular{ll}{
 Package: \tab TreeSimGM\cr
 Type: \tab Package\cr
-Version: \tab 2.3\cr
-Date: \tab 2017-09-20\cr
+Version: \tab 2.5\cr
+Date: \tab 2020-03-04\cr
 License: \tab GPL-2 \cr
 LazyLoad: \tab yes\cr
 }
@@ -20,17 +20,22 @@ TreeSimGM returns a list of phylogenetic trees. The trees can be simulated in di
 \author{
 Oskar Hagen, Tanja Stadler
 
-Maintainer: Oskar Hagen <oskar.hagen@outlook.com>
+Maintainer: Oskar Hagen <oskar@hagen.bio>
 }
 \references{
 
 O. Hagen and T. Stadler (2017). TreeSimGM: Simulating phylogenetic trees under general Bellman Harris models with lineage-specific shifts of speciation and extinction in R. Methods in Ecology and Evolution.
 
 O. Hagen, K. Hartmann, M. Steel and T. Stadler (2015). Age-dependent Speciation can Explain the Shape of Empirical Trees. Systematic Biology. 64, v.3, p.432-440.
-
-T. Stadler: Simulating trees on a fixed number of extant species. Syst. Biol. (2011) 60: 676-684.
 }
-\keyword{tree, phylogeny, simulation, general model, macroevolution }
+
+\concept{tree}
+\concept{phylogenies}
+\concept{phylogenetic trees}
+\concept{simulation}
+\concept{general model} 
+\concept{macroevolution}
+
 \seealso{
 \code{\link[TreeSim]{TreeSim}},
 \code{\link[ape]{ape}}, \code{sim.age}, \code{sim.taxa}, \code{track.shift}

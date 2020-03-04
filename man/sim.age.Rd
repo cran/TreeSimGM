@@ -55,8 +55,6 @@ shiftext=list(prob=0, strength="runif(0.1,0.2)"), sampling=list(frac=1, branchpr
 O. Hagen and T. Stadler (2017). TreeSimGM: Simulating phylogenetic trees under general Bellman Harris models with lineage-specific shifts of speciation and extinction in R. Methods in Ecology and Evolution.
 
 O. Hagen, K. Hartmann, M. Steel and T. Stadler (2015). Age-dependent Speciation can Explain the Shape of Empirical Trees. Systematic Biology. 64, v.3, p.432-440.
-
-T. Stadler: Simulating trees on a fixed number of extant species. Syst. Biol. (2011) 60: 676-684.
 }
 \author{Oskar Hagen, Tanja Stadler}
 %\note{%todo
